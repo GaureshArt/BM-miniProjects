@@ -27,18 +27,16 @@ export const Login = () => {
       const toastId = toast.loading("please wait");
       return toastId;
     },
-    onSuccess: (data, formData) => {
+    onSuccess: (data, formData,context) => {
       setRole(isAdmin);
       const decode = jwtDecode(data.token);
       setUsername(formData.username);
       setId(Number(decode.sub));
       navigate("/adminPanel");
-    },
-    onError: () => {
-      toast.error("Username or password is incorrect");
-    },
-    onSettled: (_, __, ___, context) => {
       toast.success("Successfully login", { id: context });
+    },
+    onError: (_, __, context) => {
+      toast.error("Username or password is incorrect",{id:context});
     },
   });
   const onSubmitForm = (data: IAuthFormType) => {
