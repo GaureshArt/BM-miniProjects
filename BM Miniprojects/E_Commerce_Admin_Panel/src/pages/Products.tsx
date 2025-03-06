@@ -1,0 +1,125 @@
+import { useQuery } from "@tanstack/react-query";
+import { Navbar } from "../components/Navbar";
+import { getAllProducts } from "../api/productsApi";
+import { Button, Skeleton } from "antd";
+import { ProductCard } from "../components/ProductCard";
+import { useProductStore } from "../stores/useProductStore";
+import { ChangeEvent, useEffect, useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
+
+export const Products = () => {
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: getAllProducts,
+  });
+  const [searchProd, setSearchProd] = useState<string>("");
+  const filterData = useProductStore((state) => state.filterProducts);
+  const setFilterData = useProductStore((state) => state.setFilterProduct);
+  const sortFilterData = useProductStore((state) => state.sortFilterData);
+  const setSortType = useProductStore((state) => state.setSortType);
+  const setFilterCategory = useProductStore((state) => state.setFilterCategory);
+  const resetFilterProd = useProductStore((state) => state.resetFilterProduct);
+  const sortType = useProductStore((state) => state.sortType);
+  const filterCategory = useProductStore((state) => state.filterCategory);
+  const setSeachQuery = useProductStore((state) => state.setSearchQuery);
+  useEffect(() => {
+    const queryTime = setTimeout(() => {
+      setSeachQuery(searchProd);
+      setFilterData();
+      
+    }, 300);
+    return () => clearTimeout(queryTime);
+  }, [searchProd]);
+  const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFilterCategory(e.target.value);
+    handleFilterSorting();
+  };
+  const handleSort = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSortType(e.target.value);
+    handleFilterSorting();
+  };
+  const handleFilterSorting = () => {
+    setFilterData();
+    sortFilterData();
+  };
+
+  if (isLoading) {
+    return (
+      <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
+        {Array.from({ length: 20 })
+          .fill(1)
+          .map((_, ind) => {
+            return (
+              <div className="w-60 h-40 ">
+                <Skeleton
+                  key={ind}
+                  active
+                  style={{ width: "10rem", height: "5rem" }}
+                />
+              </div>
+            );
+          })}
+      </div>
+    );
+  }
+  if (isError) {
+    return <h1 className="text-red-500 bg-red-200">Error:${error.message} </h1>;
+  }
+  return (
+    <>
+      <div className="w-svw flex justify-center m-4">
+        <Navbar />
+      </div>
+      <div className="w-svw h-svh p-1 ">
+        <div className="flex gap-5 w-full justify-center m-3 font-serif">
+          <div className="w-1/3 flex gap-1">
+            <SearchOutlined className="text-2xl" style={{ color: "#71717a" }} />
+            <input
+              type="text"
+              onChange={(e) => setSearchProd(e.target.value)}
+              className="w-full border border-zinc-400 rounded-lg p-2"
+            />
+          </div>
+
+          <select
+            className="w-auto h-10 border-zinc-500 border rounded-lg"
+            value={filterCategory}
+            onChange={handleFilter}
+          >
+            <option value={"All Products"}>All Products</option>
+            <option value="men's clothing">men's clothing</option>
+            <option value="electronics">electronics</option>
+            <option value="jewelery">jewelery</option>
+            <option value="women's clothing">women's clothing</option>
+          </select>
+          <select
+            className="w-auto h-10 border-zinc-500 border rounded-lg"
+            value={sortType}
+            onChange={handleSort}
+          >
+            <option disabled value="sort">
+              Sort
+            </option>
+            <option value="low">{"Low -> High"}</option>
+            <option value="high">{"High -> Low"}</option>
+          </select>
+          <Button
+            color="gold"
+            variant="filled"
+            size="large"
+            style={{ fontFamily: "serif" }}
+            onClick={resetFilterProd}
+          >
+            Reset
+          </Button>
+        </div>
+
+        <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
+          {filterData!.map((prod) => {
+            return <ProductCard key={prod.id} prod={prod} />;
+          })}
+        </div>
+      </div>
+    </>
+  );
+};

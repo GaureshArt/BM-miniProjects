@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IAuthFormType } from "../types/authTypes";
 
-const fakeStoreApi = axios.create({
+export const fakeStoreApi = axios.create({
     baseURL:'https://fakestoreapi.com'
 });
 
