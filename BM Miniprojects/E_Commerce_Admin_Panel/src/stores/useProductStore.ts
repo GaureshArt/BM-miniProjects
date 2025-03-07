@@ -37,12 +37,24 @@ export const useProductStore = create<IUseProductType>()(devtools((set) => ({
     setFilterCategory:(category:string)=>set((_)=>({
         filterCategory:category,
     })),
+    addNewProduct: (data: IProductType) =>
+      set((state) => ({
+        products: state.products ? [...state.products, data] : [data],
+        filterProducts: state.filterProducts ? [...state.filterProducts, data] : [data],
+      })),
     resetFilterProduct:()=>set((state)=>({
         sortType:'sort',
         filterProducts:state.products,
         filterCategory:'All Products',
+        searchQuery:'',
     })),
     setSearchQuery:(prodTitle:string)=>set((_)=>({
       searchQuery:prodTitle,
+    })),
+    updateProduct:(data:IProductType)=>set((state)=>({
+      products:state.products?.map((prod)=>prod.id===data.id?data:prod),
+    })),
+    deleteProduct:(id:number)=>set((state)=>({
+      products:state.products?.filter((prod)=>prod.id!==id),
     })),
 })));

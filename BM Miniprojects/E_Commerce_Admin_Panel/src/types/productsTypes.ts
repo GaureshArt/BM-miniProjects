@@ -25,5 +25,7 @@ export interface IUseProductType{
     setSortType:(data:string)=>void;
     resetFilterProduct:()=>void;
     setSearchQuery:(data:string)=>void;
-    
+    addNewProduct:(data:IProductType)=>void;
+    updateProduct:(data:IProductType)=>void;
+    deleteProduct:(id:number)=>void;
 }

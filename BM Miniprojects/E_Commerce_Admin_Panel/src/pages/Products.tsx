@@ -6,6 +6,9 @@ import { ProductCard } from "../components/ProductCard";
 import { useProductStore } from "../stores/useProductStore";
 import { ChangeEvent, useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
+import { useAuth } from "../stores/useAuth";
+import { Role } from "../types/authTypes";
+import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
   const { isLoading, isError, error } = useQuery({
@@ -13,6 +16,8 @@ export const Products = () => {
     queryFn: getAllProducts,
   });
   const [searchProd, setSearchProd] = useState<string>("");
+  const nagivate = useNavigate();
+  const role = useAuth((state) => state.role);
   const filterData = useProductStore((state) => state.filterProducts);
   const setFilterData = useProductStore((state) => state.setFilterProduct);
   const sortFilterData = useProductStore((state) => state.sortFilterData);
@@ -26,7 +31,6 @@ export const Products = () => {
     const queryTime = setTimeout(() => {
       setSeachQuery(searchProd);
       setFilterData();
-      
     }, 300);
     return () => clearTimeout(queryTime);
   }, [searchProd]);
@@ -50,12 +54,8 @@ export const Products = () => {
           .fill(1)
           .map((_, ind) => {
             return (
-              <div className="w-60 h-40 ">
-                <Skeleton
-                  key={ind}
-                  active
-                  style={{ width: "10rem", height: "5rem" }}
-                />
+              <div key={ind} className="w-60 h-40">
+                <Skeleton active style={{ width: "10rem", height: "5rem" }} />
               </div>
             );
           })}
@@ -112,6 +112,19 @@ export const Products = () => {
           >
             Reset
           </Button>
+          {role === Role.admin ? (
+            <Button
+              color="purple"
+              size="large"
+              variant="filled"
+              style={{ fontFamily: "serif" }}
+              onClick={() => nagivate("addProduct")}
+            >
+              Add Product
+            </Button>
+          ) : (
+            ""
+          )}
         </div>
 
         <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
