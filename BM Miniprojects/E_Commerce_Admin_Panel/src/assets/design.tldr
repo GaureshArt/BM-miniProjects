@@ -85,8 +85,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": -81.16668319702148,
-			"y": 397.3020998636882,
+			"x": -187.83330917358398,
+			"y": 387.9687716166179,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -124,6 +124,11 @@
 							"content": [
 								{
 									"type": "text",
+									"marks": [
+										{
+											"type": "code"
+										}
+									],
 									"text": "m38rmF$"
 								}
 							]
@@ -150,9 +155,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 58.58331489562988,
-			"y": 434.5677344004314,
-			"lastActivityTimestamp": 1741350542672,
+			"x": -112.24999809265137,
+			"y": 413.90107027689623,
+			"lastActivityTimestamp": 1741409646960,
 			"meta": {}
 		},
 		{
@@ -172,7 +177,7 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 993.3333740234375,
+				"w": 496,
 				"h": 335.3333435058594
 			},
 			"insets": [
@@ -190,7 +195,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1.5,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": true,
+			"isHoveringCanvas": false,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,
@@ -216,8 +221,8 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": 297.7500286102295,
-			"y": -311.23439852396655,
+			"x": 339.24999809265137,
+			"y": -306.5677344004314,
 			"z": 1,
 			"meta": {},
 			"id": "camera:page:page",
