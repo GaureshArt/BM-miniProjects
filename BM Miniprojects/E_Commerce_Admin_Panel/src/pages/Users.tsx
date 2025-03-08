@@ -10,6 +10,8 @@ import { useUserStore } from "../stores/useUserStore";
 import { IUserTableType} from "../types/userTypes";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "../stores/useAuth";
+import { Role } from "../types/authTypes";
 
 
 const { Column, ColumnGroup } = Table;
@@ -17,6 +19,7 @@ const { Column, ColumnGroup } = Table;
 export const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const {role} = useAuth();
   const [userDeleteId,setUserDeleteId] = useState<number>(-1)
   const [modalText] = useState("This is will permanently remove User.");
   const removeUser = useUserStore((state)=>state.removeUserData);
@@ -57,6 +60,9 @@ export const Users = () => {
   const handleCancel = () => {
     setOpen(false);
   };
+  if(role ===Role.user){
+    navigate('/notAuth');
+  }
   return (
     <>
     <Toaster/>

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Navbar } from "../components/Navbar";
 import { getAllProducts } from "../api/productsApi";
 import { Button, Skeleton } from "antd";
@@ -9,6 +9,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useAuth } from "../stores/useAuth";
 import { Role } from "../types/authTypes";
 import { useNavigate } from "react-router-dom";
+import { ICartType, IProductCartType } from "../types/cartTypes";
+import toast from "react-hot-toast";
+import { addCartProd } from "../api/cartApi";
+import { useCartStore } from "../stores/useCartStore";
 
 export const Products = () => {
   const { isLoading, isError, error } = useQuery({
@@ -16,8 +20,11 @@ export const Products = () => {
     queryFn: getAllProducts,
   });
   const [searchProd, setSearchProd] = useState<string>("");
+  const [newCartProduct,setNewCartProducts] = useState<IProductCartType[]>([])
+  
   const nagivate = useNavigate();
   const role = useAuth((state) => state.role);
+  const userId = useAuth((state)=>state.id);
   const filterData = useProductStore((state) => state.filterProducts);
   const setFilterData = useProductStore((state) => state.setFilterProduct);
   const sortFilterData = useProductStore((state) => state.sortFilterData);
@@ -27,6 +34,7 @@ export const Products = () => {
   const sortType = useProductStore((state) => state.sortType);
   const filterCategory = useProductStore((state) => state.filterCategory);
   const setSeachQuery = useProductStore((state) => state.setSearchQuery);
+  const addCart = useCartStore((state)=>state.addCart);
   useEffect(() => {
     const queryTime = setTimeout(() => {
       setSeachQuery(searchProd);
@@ -46,7 +54,36 @@ export const Products = () => {
     setFilterData();
     sortFilterData();
   };
+  const handleNewCartProd = (data:IProductCartType)=>{
+    const isExist = newCartProduct.find((prod)=>prod.productId===data.productId);
+    if(isExist){
+      toast.success('Product is already added.');
+      return;
+    }
+      setNewCartProducts((prev)=>[
+        ...prev,
+        data
+      ])
+  }
 
+  const {mutate:addCartMutate} = useMutation({
+    mutationKey:['addCart'],
+    mutationFn:addCartProd,
+    onSuccess:(data:ICartType)=>{
+        console.log("onsucce",data);
+        addCart(data);
+    }
+    
+  })
+  const handleNewCartAdd = ()=>{
+    const data = {
+      userId:userId,
+      products:newCartProduct,
+      date:new Date().toISOString(),
+    }
+    addCartMutate(data);
+
+  }
   if (isLoading) {
     return (
       <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
@@ -123,13 +160,13 @@ export const Products = () => {
               Add Product
             </Button>
           ) : (
-            ""
+            newCartProduct.length?<Button style={{fontFamily:'serif'}} size="large" variant="filled" color="geekblue" onClick={handleNewCartAdd}>Confirm Cart Products</Button>:''
           )}
         </div>
 
         <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
           {filterData!.map((prod) => {
-            return <ProductCard key={prod.id} prod={prod} />;
+            return <ProductCard key={prod.id} prod={prod} handleNewCartProd = {handleNewCartProd} />;
           })}
         </div>
       </div>

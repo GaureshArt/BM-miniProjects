@@ -5,13 +5,16 @@ import { ProtectedRoute } from "./pages/ProtectedRoute";
 import { AdminPanel } from "./pages/AdminPanel";
 import { Products } from "./pages/Products";
 import { Users } from "./pages/Users";
-import { Orders } from "./pages/Orders";
+
 import { ProductView } from "./pages/ProductView";
 import { ProductAdd } from "./pages/ProductAdd";
 import { ProductEdit } from "./pages/ProductEdit";
 import { UserEdit } from "./pages/UserManagement/UserEdit";
 import { UserAdd } from "./pages/UserManagement/UserAdd";
 import { UserDetails } from "./pages/UserManagement/UserDetails";
+import { Orders } from "./pages/orderManagement/Orders";
+import NotAuth from "./pages/NotAuth";
+import NotFound from "./pages/NotFound";
 const App =  () => (
  <>
    <Router>
@@ -28,11 +31,12 @@ const App =  () => (
             <Route path="adminPanel/users/userDetails/:userId" element={<UserDetails/>}/>
             <Route path="adminPanel/users/editUser/:userId" element={<UserEdit/>}/>
             <Route path="adminPanel/users/addUser" element={<UserAdd/>}/>
-
-
             <Route path="adminPanel/orders" element={<Orders/>}/>
-
          </Route>
+         <Route path="/products" element={<Products/>}/>
+         <Route path="/orders" element={<Orders/>}/>
+         <Route path='/notAuth' element={<NotAuth/>}/>
+         <Route path="*" element={<NotFound/>}/>
       </Routes>
    </Router>
  </>

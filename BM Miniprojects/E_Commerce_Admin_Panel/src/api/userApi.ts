@@ -38,3 +38,8 @@ export const userDelete = async(id:number)=>{
     const res = await fakeStoreApi.delete(`/users/${id}`);
     return res.data;
 }
+
+export const getUserById = async(id:number)=>{
+    const res = await fakeStoreApi.get(`/users/${id}`);
+    return res.data;
+}

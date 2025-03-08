@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, StarFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import { Button, Card, Modal } from "antd";
 import Meta from "antd/es/card/Meta";
 import { IProductType } from "../types/productsTypes";
@@ -8,16 +8,21 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteProduct } from "../api/productsApi";
 import { useProductStore } from "../stores/useProductStore";
 import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "../stores/useAuth";
+import { Role } from "../types/authTypes";
+import { IProductCartType } from "../types/cartTypes";
 
 interface IProductCardProps {
   prod: IProductType;
+  handleNewCartProd:(data: IProductCartType) => void
 }
-export const ProductCard = ({ prod }: IProductCardProps) => {
+export const ProductCard = ({ prod,handleNewCartProd }: IProductCardProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const deleteProd = useProductStore((state) => state.deleteProduct);
   const setFilterProduct = useProductStore((state) => state.setFilterProduct);
   const [modalText] = useState("This is will permanently remove product.");
+  const {role} = useAuth();
   const { mutate: prodDelete, isPending } = useMutation({
     mutationKey: ["productDelete"],
     mutationFn: deleteProduct,
@@ -36,6 +41,7 @@ export const ProductCard = ({ prod }: IProductCardProps) => {
       });
     },
   });
+
   const showModal = () => {
     setOpen(true);
   };
@@ -48,6 +54,10 @@ export const ProductCard = ({ prod }: IProductCardProps) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  
+  const addCartHandle = ()=>{
+    handleNewCartProd({productId:prod.id,quantity:1});
+  }
   return (
     <>
       <Toaster />
@@ -67,7 +77,13 @@ export const ProductCard = ({ prod }: IProductCardProps) => {
             src={prod.image}
           />
         }
-        actions={[
+        actions={role===Role.user?[
+          <Button
+            color="purple"
+            variant="text"
+            icon={<ShoppingCartOutlined key="addCart" />}
+            onClick={addCartHandle}
+          />]:[
           <Button
             color="red"
             variant="text"
@@ -81,6 +97,8 @@ export const ProductCard = ({ prod }: IProductCardProps) => {
             icon={<EditOutlined key="edit" />}
             onClick={() => navigate(`editProduct/${prod.id}`)}
           />,
+          
+
         ]}
       >
         <Meta title={prod.title} />
