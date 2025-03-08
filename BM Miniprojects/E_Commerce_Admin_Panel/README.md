@@ -25,5 +25,5 @@ https://github.com/user-attachments/assets/b3efdc78-7206-454b-85e9-d4cd3550f676
   - Users **cannot access other users' carts**.  
 - **Access Control:** Users **do not** have access to the admin panel.  
 
-This PR implements full CRUD functionality for both **products and users**, ensures proper access control, and enhances the user experience with **sorting, filtering, and analytics dashboards** for admins. 🚀  
+  
 
