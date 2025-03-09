@@ -23,10 +23,7 @@ export const OrderProd = ({prod,cartId}:IOrderProdProps) => {
     const {mutate:updateQuantApi} = useMutation({
         mutationKey:['updateQuantity'],
         mutationFn:updateCartProdQuant,
-        onSuccess:(data)=>{
-          console.log("update",data);
         
-          }
         })
         
     const handleQuantity = (e:ChangeEvent<HTMLInputElement>)=>{
