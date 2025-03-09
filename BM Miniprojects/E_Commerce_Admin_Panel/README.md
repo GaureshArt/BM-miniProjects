@@ -11,7 +11,9 @@ https://github.com/user-attachments/assets/b3efdc78-7206-454b-85e9-d4cd3550f676
 - **Product Management:** Admin can **add, update, and delete** products.  
 - **User Management:** Admin can **view, add, update, and delete** user details.  
 - **Order Management:** Admin can **view, update, and delete** all users' cart details (orders).  
-- **Filtering & Sorting:** Products can be **searched, filtered by category, and sorted by price**.  
+- **Filtering & Sorting:** Products can be **searched, filtered by category, and sorted by price**.
+- **Dynamic Category** Admin can add new category product.
+- **user Search bar** Admin can search user by its firstname
 - **Analytics Dashboard:**  
   - Total **products ordered by users**.  
   - **Cart creation timeline** to track order trends.  
