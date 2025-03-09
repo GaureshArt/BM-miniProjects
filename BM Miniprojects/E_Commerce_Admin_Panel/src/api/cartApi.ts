@@ -1,32 +1,40 @@
-
-import { fakeStoreApi } from "./authApi"
+import { fakeStoreApi } from "./authApi";
 import { useCartStore } from "../stores/useCartStore";
-import { IAddCartProd } from "../types/cartTypes";
+import { IAddCartProd, ICartType } from "../types/cartTypes";
 
-  
-  
-export const  getAllCarts = async()=>{
-  const res = await fakeStoreApi.get('/carts');
-  useCartStore.setState({cartData:res.data});
+export const getAllCarts = async (): Promise<ICartType[]> => {
+  const res = await fakeStoreApi.get<ICartType[]>("/carts");
+  useCartStore.setState({ cartData: res.data });
   return res.data;
-}
-export const updateCartProdQuant = async(cartId:number)=>{
-  const updateData = useCartStore.getState().cartData.find((cart)=>cart.id===cartId);
-  const res = await fakeStoreApi.patch(`/carts/${cartId}`,updateData);
-  console.log("respoense",res)
-  return res.data;
-}
+};
+export const updateCartProdQuant = async (
+  cartId: number
+): Promise<ICartType> => {
+  const updateData = useCartStore
+    .getState()
+    .cartData.find((cart) => cart.id === cartId);
+  const res = await fakeStoreApi.patch<ICartType>(
+    `/carts/${cartId}`,
+    updateData
+  );
 
-export const removeCartProd = async(cartId:number)=>{
-  const updateData = useCartStore.getState().cartData.find((cart)=>cart.id===cartId);
-  console.log("remove Prod",updateData)
-  const res = await fakeStoreApi.patch(`/carts/${cartId}`,updateData);
-  console.log("respoense",res)
   return res.data;
-}
+};
 
-export const addCartProd = async(data:IAddCartProd)=>{
-  const res = await fakeStoreApi.post(`/carts`,data);
+export const removeCartProd = async (cartId: number): Promise<ICartType> => {
+  const updateData = useCartStore
+    .getState()
+    .cartData.find((cart) => cart.id === cartId);
+
+  const res = await fakeStoreApi.patch<ICartType>(
+    `/carts/${cartId}`,
+    updateData
+  );
+
   return res.data;
-  
-}
+};
+
+export const addCartProd = async (data: IAddCartProd): Promise<ICartType> => {
+  const res = await fakeStoreApi.post<ICartType>(`/carts`, data);
+  return res.data;
+};

@@ -83,7 +83,7 @@ export const OrderProd = ({prod,cartId}:IOrderProdProps) => {
         <div className="mt-4 flex items-center gap-2">
           <div>
             <span>Quantity:{cartProdData?.quantity}</span>
-            <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Quantity Update" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <input type="number" value={quant}  onChange={handleQuantity}/>
             </Modal>
           </div>
