@@ -4,6 +4,7 @@ import { Role } from '../types/authTypes';
 import { Navigate, Outlet } from 'react-router-dom';
 import { getAllCarts } from '../api/cartApi';
 import { getAllProducts } from '../api/productsApi';
+import { getAllUsers } from '../api/userApi';
 
 
 export const ProtectedRoute = () => {
@@ -15,6 +16,10 @@ export const ProtectedRoute = () => {
         const {  } = useQuery({
           queryKey: ["products"],
           queryFn: getAllProducts,
+        });
+        const {} = useQuery({
+          queryKey: ["userData"],
+          queryFn: getAllUsers,
         });
     const role = useAuth((state)=>state.role);
     return (role===Role.admin?<Outlet/>:<Navigate to={'/orders'}/>)

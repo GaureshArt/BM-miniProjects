@@ -26,7 +26,8 @@ export const updateProduct = async ({
   );
   return res.data;
 };
-export const deleteProduct = async ({ prodId }: { prodId: number }) => {
-  const res = await fakeStoreApi.delete(`/products/${prodId}`);
+export const deleteProduct = async ({ prodId }: { prodId: number }):Promise<IProductType> => {
+  const res = await fakeStoreApi.delete<IProductType>(`/products/${prodId}`);
+  
   return res.data;
 };

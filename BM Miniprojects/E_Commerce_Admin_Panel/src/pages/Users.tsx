@@ -37,11 +37,8 @@ export const Users = () => {
           );
     }, 400);
     return () => clearTimeout(debounceTime);
-  }, [userQeury]);
-  const {} = useQuery({
-    queryKey: ["userData"],
-    queryFn: getAllUsers,
-  });
+  }, [userQeury,filterUserData]);
+ 
 
   const { mutate: userRemove } = useMutation({
     mutationKey: ["userRemove"],
