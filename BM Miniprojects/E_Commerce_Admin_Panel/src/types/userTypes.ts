@@ -47,10 +47,13 @@ export interface IUserAddType {
 export interface IUseUserType{
     userData:Partial<IUserType>[];
     filterUserData:IUserTableType[] ;
+    userSearchQuery:string;
     updateUserData:(data:IUserType)=>void;
     updateFilterUserData:(data:IUserTableType)=>void;
     addUserData:(data:IUserAddType)=>void;
     removeUserData:(data:number)=>void;
+    setFilterUserDataByQuery:()=>void;
+    setUserSearchQuery:(data:string)=>void;
 }
 
 export interface IUserUpdateFormType extends Exclude<IUserTableType,'key'>{

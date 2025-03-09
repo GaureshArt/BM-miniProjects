@@ -20,11 +20,11 @@ export const Products = () => {
     queryFn: getAllProducts,
   });
   const [searchProd, setSearchProd] = useState<string>("");
-  const [newCartProduct,setNewCartProducts] = useState<IProductCartType[]>([])
-  
+  const [newCartProduct, setNewCartProducts] = useState<IProductCartType[]>([]);
+
   const nagivate = useNavigate();
   const role = useAuth((state) => state.role);
-  const userId = useAuth((state)=>state.id);
+  const userId = useAuth((state) => state.id);
   const filterData = useProductStore((state) => state.filterProducts);
   const setFilterData = useProductStore((state) => state.setFilterProduct);
   const sortFilterData = useProductStore((state) => state.sortFilterData);
@@ -34,7 +34,8 @@ export const Products = () => {
   const sortType = useProductStore((state) => state.sortType);
   const filterCategory = useProductStore((state) => state.filterCategory);
   const setSeachQuery = useProductStore((state) => state.setSearchQuery);
-  const addCart = useCartStore((state)=>state.addCart);
+  const addCart = useCartStore((state) => state.addCart);
+  const [category,setCategory] = useState<string[]>([]);
   useEffect(() => {
     const queryTime = setTimeout(() => {
       setSeachQuery(searchProd);
@@ -42,6 +43,10 @@ export const Products = () => {
     }, 300);
     return () => clearTimeout(queryTime);
   }, [searchProd]);
+  useEffect(()=>{
+    const categories = [...new Set(filterData?.map((prod)=>prod.category))]!;
+    setCategory(categories);
+  },[])
   const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
     setFilterCategory(e.target.value);
     handleFilterSorting();
@@ -54,36 +59,33 @@ export const Products = () => {
     setFilterData();
     sortFilterData();
   };
-  const handleNewCartProd = (data:IProductCartType)=>{
-    const isExist = newCartProduct.find((prod)=>prod.productId===data.productId);
-    if(isExist){
-      toast.success('Product is already added.');
+  const handleNewCartProd = (data: IProductCartType) => {
+    const isExist = newCartProduct.find(
+      (prod) => prod.productId === data.productId
+    );
+    if (isExist) {
+      toast.success("Product is already added.");
       return;
     }
-      setNewCartProducts((prev)=>[
-        ...prev,
-        data
-      ])
-  }
+    setNewCartProducts((prev) => [...prev, data]);
+  };
 
-  const {mutate:addCartMutate} = useMutation({
-    mutationKey:['addCart'],
-    mutationFn:addCartProd,
-    onSuccess:(data:ICartType)=>{
-        console.log("onsucce",data);
-        addCart(data);
-    }
-    
-  })
-  const handleNewCartAdd = ()=>{
+  const { mutate: addCartMutate } = useMutation({
+    mutationKey: ["addCart"],
+    mutationFn: addCartProd,
+    onSuccess: (data: ICartType) => {
+      
+      addCart(data);
+    },
+  });
+  const handleNewCartAdd = () => {
     const data = {
-      userId:userId,
-      products:newCartProduct,
-      date:new Date().toISOString(),
-    }
+      userId: userId,
+      products: newCartProduct,
+      date: new Date().toISOString(),
+    };
     addCartMutate(data);
-
-  }
+  };
   if (isLoading) {
     return (
       <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
@@ -122,12 +124,19 @@ export const Products = () => {
             className="w-auto h-10 border-zinc-500 border rounded-lg"
             value={filterCategory}
             onChange={handleFilter}
-          >
-            <option value={"All Products"}>All Products</option>
+          > 
+          
+          {
+            category.map((cat)=>{
+              return <option key={cat} value={cat}>{cat}</option>
+            })
+            
+          }
+            {/* <option value={"All Products"}>All Products</option>
             <option value="men's clothing">men's clothing</option>
             <option value="electronics">electronics</option>
             <option value="jewelery">jewelery</option>
-            <option value="women's clothing">women's clothing</option>
+            <option value="women's clothing">women's clothing</option> */}
           </select>
           <select
             className="w-auto h-10 border-zinc-500 border rounded-lg"
@@ -159,14 +168,30 @@ export const Products = () => {
             >
               Add Product
             </Button>
+          ) : newCartProduct.length ? (
+            <Button
+              style={{ fontFamily: "serif" }}
+              size="large"
+              variant="filled"
+              color="geekblue"
+              onClick={handleNewCartAdd}
+            >
+              Confirm Cart Products
+            </Button>
           ) : (
-            newCartProduct.length?<Button style={{fontFamily:'serif'}} size="large" variant="filled" color="geekblue" onClick={handleNewCartAdd}>Confirm Cart Products</Button>:''
+            ""
           )}
         </div>
 
         <div className=" flex  flex-wrap w-full gap-4 justify-evenly">
           {filterData!.map((prod) => {
-            return <ProductCard key={prod.id} prod={prod} handleNewCartProd = {handleNewCartProd} />;
+            return (
+              <ProductCard
+                key={prod.id}
+                prod={prod}
+                handleNewCartProd={handleNewCartProd}
+              />
+            );
           })}
         </div>
       </div>

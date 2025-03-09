@@ -7,7 +7,7 @@ import { getAllProducts } from '../api/productsApi';
 
 
 export const ProtectedRoute = () => {
-    const {data:carts} = useQuery({
+    const {} = useQuery({
         queryKey:['cartData'],
         queryFn:getAllCarts,
         staleTime:1000*60*60,

@@ -5,6 +5,7 @@ import { devtools } from "zustand/middleware";
 export const useUserStore = create<IUseUserType>()(devtools((set)=>({
     userData:[],
     filterUserData:[],
+    userSearchQuery:'',
     updateUserData:(data:IUserUpdateFormType)=>set((state)=>({
         userData:state.userData.map((user)=>user.id===data.id?{...user,data}:user),
     })),
@@ -16,5 +17,9 @@ export const useUserStore = create<IUseUserType>()(devtools((set)=>({
     })),
     removeUserData:(id:number)=>set((state)=>({
         filterUserData:state.filterUserData.filter((user)=>user!.key!==id),
-    }))
+    })),
+   
+    setUserSearchQuery:(query:string)=>set((_)=>({
+        userSearchQuery:query
+    })),
 })))

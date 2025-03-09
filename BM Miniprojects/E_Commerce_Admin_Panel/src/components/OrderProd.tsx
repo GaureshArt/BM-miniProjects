@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { useCartStore } from '../stores/useCartStore';
 import { useMutation } from '@tanstack/react-query';
 import { removeCartProd, updateCartProdQuant } from '../api/cartApi';
-import toast, { ToastBar, Toaster } from 'react-hot-toast';
+import toast, {  Toaster } from 'react-hot-toast';
 interface IOrderProdProps{
     prod:IProductCartType;
     cartId:number;
@@ -16,17 +16,14 @@ export const OrderProd = ({prod,cartId}:IOrderProdProps) => {
     const cartProdData = useCartStore((state)=>state.cartData).find((cart)=>cart.id===cartId)?.products.find((p)=>p.productId===prod.productId);
     const [quant,setQuant] = useState<number>(cartProdData?.quantity!)
     const updateQuant = useCartStore((state)=>state.updateQuantity);
-    const updateCart= useCartStore((state)=>state.updateCart);
+    
     const removeProdFromCart = useCartStore((state)=>state.removeProd);
     const prodData = useProductStore((state)=>state.products)?.find((p)=>p.id===prod.productId)!;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {mutate:updateQuantApi} = useMutation({
         mutationKey:['updateQuantity'],
         mutationFn:updateCartProdQuant,
-        onSuccess:(data)=>{
-          console.log("update",data);
         
-          }
         })
         
     const handleQuantity = (e:ChangeEvent<HTMLInputElement>)=>{
@@ -54,7 +51,7 @@ export const OrderProd = ({prod,cartId}:IOrderProdProps) => {
     const {mutate:removeProdCart} = useMutation({
       mutationKey:['removeProdCart'],
       mutationFn:removeCartProd,
-      onSuccess:(data,_,context)=>{
+      onSuccess:(__,_,context)=>{
         
         toast.success(`Product  remove: successfully`, {
           id: context,
