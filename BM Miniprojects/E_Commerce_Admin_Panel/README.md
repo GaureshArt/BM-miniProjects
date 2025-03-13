@@ -1,3 +1,7 @@
+**Log in credentials:
+Username:  johnd
+password:  m38rmF$**
+
 # Demo:
 
 https://github.com/user-attachments/assets/b3efdc78-7206-454b-85e9-d4cd3550f676
